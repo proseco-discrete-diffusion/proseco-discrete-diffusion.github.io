@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="Learn from Your Mistakes: Self-Correcting Masked Diffusion Models">
+  <meta property="og:title" content="Self-Correcting Masked Diffusion Models" />
+  <meta property="og:description" content="Learn from Your Mistakes: Self-Correcting Masked Diffusion Models" />
+  <meta property="og:url" content="https://proseco-discrete-diffusion.github.io/" />
+
+  <title>Learn from Your Mistakes: Self-Correcting Masked Diffusion Models project page</title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">
+              Learn from Your Mistakes:<br>Self-Correcting Masked Diffusion Models
+            </h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <span class="author-block">
+                <a href="https://yair-schiff.github.io/" target="_blank">Yair Schiff<sup>*1</sup></a>,
+                <a href="https://www.linkedin.com/in/omerb01/" target="_blank">Omer Belhasin<sup>*2</sup></a>,
+                <a href="https://www.linkedin.com/in/roy-uziel-a0445ab6/" target="_blank">Roy Uziel<sup>2</sup></a>,
+                <a href="https://www.guanghanwang.com/" target="_blank">Guanghan Wang<sup>1</sup></a>,
+                <a href="https://m-arriola.com/" target="_blank">Marianne Arriola<sup>1</sup></a>,
+                <a href="https://giladturok.github.io/" target="_blank">Gilad Turok<sup>1</sup></a>,
+              </span>
+              <span class="author-block" style="white-space: nowrap;">
+                <a href="https://elad.cs.technion.ac.il/about-me/" target="_blank">Michael Elad<sup>&dagger;2</sup></a>,
+                <a href="https://www.cs.cornell.edu/~kuleshov/" target="_blank">Volodymyr
+                  Kuleshov<sup>&dagger;1</sup></a>
+              </span>
+            </div>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <sup>1</sup>
+                Cornell&nbsp;&nbsp;
+                <img src="static/images/cornell.png" alt="Cornell" style="float:right;width:30px;height:30px;">
+              </span>
+              <span class="author-block">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>2</sup>
+                Nvidia&nbsp;&nbsp;
+                <img src="static/images/nvidia-logo.png" alt="Nvidia" style="float:right;width:38px;height:30px;">
+              </span>
+              <br>
+              <span class="author-block" style="font-size: 0.85em;">
+                &nbsp;&nbsp;&nbsp;<sup>*</sup>
+                Equal contribution
+                &nbsp;&nbsp;&nbsp;<sup>&dagger;</sup>
+                Equal senior authorship
+              </span>
+            </div>
+            <!-- <div class="is-size-5 publication-authors">
+            <sup>*</sup>Equal contribution
+          </div> -->
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- ArXiv abstract Link -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2602.11590" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <!-- Youtube link -->
+                <!-- <span class="link-block">
+                <a href="https://youtu.be/KG_f9uBb4bA" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+                <!-- Github link -->
+                <span class="link-block">
+                  <a href="https://github.com/kuleshov-group/proseco" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>GitHub</span>
+                  </a>
+                </span>
+                <!-- HuggingFace link -->
+                <span class="link-block">
+                  <a href="https://huggingface.co/collections/kuleshov-group/proseco" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <p>&#129303;</p>
+                    </span>
+                    <span>HuggingFace</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hero Image -->
+  <section class="section hero" style="padding:0px 0px;margin:0px auto;">
+    <div class="container is-max-desktop" style="text-align: center;">
+      <video autoplay muted loop playsinline style="width:900px; max-width:100%; height:auto; border-radius: 8px;">
+        <source src="static/demo/generation92.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </section>
+  <!-- Introduction -->
+  <!-- <section class="section" id="Introduction">
+  <div class="container is-max-desktop">
+    </div>
+  </div>
+</section> -->
+  <!-- End Introduction -->
+
+  <!-- Paper abstract -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="content is-medium">
+          <h2 class="title">Abstract</h2>
+          Masked diffusion models (MDMs) have emerged as a promising alternative to autoregressive models, enabling
+          parallel token generation while achieving competitive performance.
+          Despite these advantages, MDMs face a fundamental limitation: once tokens are unmasked, they remain fixed,
+          leading to error accumulation and ultimately degrading sample quality.
+          We address this by proposing a framework that trains a model to perform both unmasking and correction.
+          By reusing outputs from the MDM denoising network as inputs for corrector training, we train a model to
+          recover from potential mistakes.
+          During generation we apply additional corrective refinement steps between unmasking ones in order to change
+          decoded tokens and improve outputs.
+          We name our training and sampling method Progressive Self-Correction (ProSeCo) for its unique ability to
+          iteratively refine an entire sequence, including already generated tokens.
+          We conduct extensive experimental validation across multiple conditional and unconditional tasks,
+          demonstrating that ProSeCo yields better quality-efficiency trade-offs (up to ~2-3x faster sampling) and
+          enables inference-time compute scaling to further increase sample quality beyond standard MDMs (up to ~1.3x
+          improvement on benchmarks).
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End paper abstract -->
+  <section class="section" id="Graphical Abstract"></section>
+  <div class="container is-max-desktop">
+    <h4 class="subtitle has-text-centered" style="font-size:1.1rem;font-weight: normal;">
+      <div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+        <img src="static/images/graphical_abstract.png" alt="Discrete Guidance"
+          style="width: 600px; max-width: 60%; height: auto;">
+        <img src="static/images/bar_charts.png" alt="Benchmark performance"
+          style="width: 400px; max-width: 35%; height: auto;">
+      </div>
+      <br>
+      <em>
+        (Left) Overview of training ProSeCo: The original process trains the model to generate via unmasking.
+        For every timestep in the masking process, we train the model to undo corruptions that can arise from sampling
+        from the model's unmasking predictions, thereby training for self-correction.
+        (Right) Using our method to supervised fine-tune (SFT) the 8B parameter LLaDA model (<a
+          href="https://arxiv.org/abs/2502.09992" target="_blank">Nie et al., 2025</a>) significantly outperforms SFT
+        with vanilla masked diffusion modeling.
+      </em>
+    </h4>
+    <br>
+  </div>
+  </section>
+
+
+  <section class="section" id="The Problem">
+    <div class="container is-max-desktop">
+      <h2 class="title">The Problem: Masked Diffusion Models Cannot Fix Mistakes</h2>
+      <div class="content is-medium">
+        <p>
+          <b>Notation</b>
+          Let \( \mathbf{x}, \mathbf{z} \) denote one-hot vectors for some vocabulary.
+          We use the special one-hot vector \( \mathbf{m} \) to represent the mask token \( \texttt{[M]} \).
+          We denote sequences of tokens using superscripts, e.g., \( \mathbf{x}^{1:L} \) is a sequence of \( L \) tokens,
+          where \( \mathbf{x}^\ell \) denotes the \( \ell \)-th token in the sequence.
+        </p>
+        <p>
+          Masked diffusion models (MDMs) offer a compelling alternative to standard autoregressive (AR) models by
+          enabling parallel token generation.
+          In this framework, generation is framed as a denoising process.
+          Formally, a forward corruption process \( q(\mathbf{z}_t \mid \mathbf{x}) \) gradually replaces clean data
+          tokens \( \mathbf{x} \) with a special mask token \( \mathbf{m} \) as time \( t \) progresses from \( t=0 \)
+          to \( t=1 \).
+          A denoising network \( \mathbf{x}_\theta \) is then trained to reverse this process, learning to predict the
+          clean data from a partially masked sequence \( \mathbf{z}_t \).
+        </p>
+        <p>
+          This is achieved by optimizing a variational bound on the negative log-likelihood, which simplifies
+          to a weighted cross-entropy loss on masked token positions (<a href="https://arxiv.org/abs/2406.07524"
+            target="_blank">Sahoo et al., 2024</a>):
+        </p>
+        <p style="text-align: center;">
+          \( \mathcal{L}^{\text{MDM}}(\theta) = \mathbb{E} \int_0^1 \sum_{\ell=1}^L \delta_{\mathbf{z}_t^\ell,
+          \mathbf{m}} \frac{\dot{\alpha}_t}{1-\alpha_t} \log \langle \mathbf{x}_\theta^\ell(\mathbf{z}_t^{1:L}),
+          \mathbf{x}^\ell \rangle dt \)
+        </p>
+        <p>
+          where \( \delta \) is the Kroenecker delta function, and the \( \frac{\dot{\alpha}_t}{1-\alpha_t} \) factor
+          discounts samples that are more heavily noised.
+        </p>
+        <p>
+          Since the noising process is "absorbing", in the reverse, process unmasked tokens do not change.
+          This create a fundamental limitation for MDMs: once a token is unmasked during generation, it is locked in and cannot be modified by the model in future steps.
+          Because the loss objective only targets masked positions, the network \( \mathbf{x}_\theta \) is never trained
+          to modify inputs that are already unmasked.
+        </p>
+        <p>
+          Consequently, errors made during parallel decoding inevitably accumulate.
+          If the model incorrectly predicts a token early in the generation trajectory, it lacks any mechanism to
+          revisit or revise that decision.
+          As generation continues, these locked-in errors compound, leading to distributional drift that ultimately
+          degrades the overall sample quality.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="Example"></section>
+  <div class="container is-max-desktop">
+    <div class="container is-max-desktop"></div>
+    <h4 class="subtitle has-text-centered" style="font-size:1.1rem;font-weight: normal;">
+      <div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+        <img src="static/images/proseco_example_bad.png" alt="Collapsed Sample"
+          style="width: 300px; max-width: 33%; height: auto;">
+        <img src="static/images/proseco_example_fix.png" alt="Fixed Sample"
+          style="width: 300px; max-width: 33%; height: auto;">
+        <img src="static/images/proseco_example_good.png" alt="High Quality Sample"
+          style="width: 300px; max-width: 33%; height: auto;">
+      </div>
+      <br>
+      <em>
+        Demonstrating the benefits of self-correction (LLaDA baseline SFT vs.
+        ProSeCo SFT; block AR decoding with 4 tokens generated at each step).
+        (Left) During parallel unmasking errors occur.
+        These mistakes accumulate, and by the 3rd block of generated text, the sample has collapsed.
+        (Middle) ProSeCo can self-correct and recover from errors.
+        After the first block, a short correction loop steers generation `back on track.'
+        (Right) ProSeCo's ability to directly alter previously decoded tokens leads to a final high quality output.
+        (Generated sequences are trimmed for illustrative purposes.)
+      </em>
+    </h4>
+  </div>
+  </div>
+  </section>
+
+  <section class="section" id="The Solution">
+    <div class="container is-max-desktop">
+      <h2 class="title">The Solution: Train for Self-Correction</h2>
+      <div class="content is-medium">
+        <p>
+          To address this limitation, we aim to equip MDMs with the inherent ability to alter previously decoded tokens.
+          We propose a framework where a single model can act in two distinct modes: when inputs contain masked tokens,
+          the model's role is to unmask; when inputs contain all non-mask tokens, the model operates in a "corrector"
+          mode and can update already generated positions.
+        </p>
+        <p>
+          Our key insight is to treat model-generated outputs as corrupted sequences from the true data distribution,
+          where certain tokens have been replaced by incorrect ones sampled from the model itself.
+          This perspective motivates using model-generated sequences as inputs for a corrector model.
+        </p>
+        <p>
+          We start by introducing an error correction term to the MDM objective, which trains a separate corrector network to recover from mistakes.
+        </p>
+        <ul>
+          <li>
+            <strong>Generating the Corrector Input:</strong> Let \( \pi \) be a transformation that generates samples
+            from the MDM denoiser.
+            We define the input to our corrector as a fully unmasked sequence \( \mathbf{y}_t^{1:L} =
+            \pi(\mathbf{x}_\theta(\mathbf{z}_t^{1:L})) \).
+            To simplify optimization and mirror how state-of-the-art MDMs decode in practice, we use deterministic
+            <code>argmax</code> sampling for \( \pi \).
+          </li>
+          <li>
+            <strong>A Joint Objective:</strong> We train a corrector model \( \mathbf{x}_\phi \) alongside the standard
+            MDM denoiser by adding an auxiliary cross-entropy loss term, \( \mathcal{L}^{\text{C}} \), scaled by a
+            weight \( \lambda \):
+            <p style="text-align: center;">
+              \( \mathcal{L}^{\text{CMDM}}(\phi, \theta) = \mathbb{E} \int_0^1 \sum_{\ell=1}^L \left[ \lambda \underbrace{\log
+              \langle \mathbf{x}_\phi^\ell(\mathbf{y}_t^{1:L}), \mathbf{x}^\ell \rangle}_{\mathcal{L}^C} + \mathcal{L}^{\text{MDM}}
+              \right] dt \)
+            </p>
+          </li>
+        </ul>
+        
+        We then make a series of design decisions to create a unified model that can perform both unmasking and self-correction:
+        <ul>
+          <li>
+            <strong>Tying Corrector and Denoiser Weights:</strong> To create a unified model without the memory overhead
+            of a separate corrector network, we tie the weights (\( \phi = \theta \)).
+            The error correction term therefore becomes a <em>self-correcting</em> one (\( \mathcal{L}^{\text{SC}} \)).
+          </li>
+          <li>
+            <strong>Setting the Corrector Loss Weight:</strong> We set the hyperparameter \( \lambda =
+            \frac{\dot{\alpha}_t}{1-\alpha_t} \), reusing the exact same time-dependent factor from the MDM objective.
+            This is justified intuitively: heavily masked sequences are harder to denoise, which means their resulting
+            predictions will be harder to correct.
+            It is therefore reasonable to down-weight them equally.
+          </li>
+        </ul>
+        <p>
+          Combining these design decisions yields our final objective for <strong>Progressive Self-Correction
+            (ProSeCo)</strong>, which effectively trains the unified model to jointly unmask and correct its own
+          decoding errors:
+        </p>
+        <p style="text-align: center;">
+          \( \mathcal{L}^{\text{SCMDM}}(\theta) = \mathbb{E} \int_0^1 \frac{\dot{\alpha}_t}{1-\alpha_t} \sum_{\ell=1}^L
+          \left[ \underbrace{\log \langle \mathbf{x}_\theta^\ell(\mathbf{y}_t^{1:L}), \mathbf{x}^\ell
+          \rangle}_{\mathcal{L}^{\text{SC}}} + \underbrace{\delta_{\mathbf{z}_t^\ell, \mathbf{m}} \log \langle
+          \mathbf{x}_\theta^\ell(\mathbf{z}_t^{1:L}), \mathbf{x}^\ell \rangle}_{\mathcal{L}^{\text{MDM}}} \right] dt \)
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="Training">
+    <div class="container is-max-desktop">
+      <h2 class="title">ProSeCo Training</h2>
+      <div class="content is-medium">
+        <p>
+          One of the biggest advantages of ProSeCo is how easily it can be integrated into existing training pipelines.
+          Training a model to simultaneously unmask tokens and self-correct requires only a minor modification to the
+          standard MDM training loop.
+        </p>
+        <p>
+          In practice, we perform the standard MDM forward pass to compute the unmasking loss.
+          Then, we take those same predictions, apply an <code>argmax</code> operation to sample discrete tokens, and
+          pass them back into the model to compute the self-correction loss.
+          To ensure training stability, we wrap the first set of outputs in a stop-gradient operation, denoted as
+          <code>sg(·)</code>, before forming the corrector input.
+        </p>
+        <p>
+          The full procedure is detailed in Algorithm 1 below, with our additions to the standard MDM training
+          highlighted in <span style="color: #8B4513; font-weight: bold;">brown</span>.
+        </p>
+
+        <div
+          style="border-top: 2px solid #363636; border-bottom: 2px solid #363636; padding: 0.5em 0; margin: 2em 0; font-family: 'Noto Sans', sans-serif; background-color: #fafafa; overflow-x: auto;">
+          <div
+            style="border-bottom: 1px solid #363636; padding-bottom: 0.5em; margin-bottom: 0.5em; font-weight: bold;">
+            Algorithm 1: <span style="font-family: 'Google Sans', sans-serif;">ProSeCo</span> Training
+          </div>
+          <div style="font-size: 0.95em; line-height: 1.6; padding-left: 0.5em;">
+            <span style="color: #7a7a7a; font-family: monospace;">// Differences from standard MDM training highlighted
+              in <span style="color: #8B4513; font-weight: bold;">brown</span>.</span><br>
+            <b>Input:</b> Training data \(\mathcal{D}\), model \(\mathbf{x}_\theta\) with parameters \(\theta\),
+            corruption process \(q\), noise schedule \(\alpha_t\).<br>
+            <b>repeat</b>
+            <ol style="margin-top: 0.2em; margin-bottom: 0.2em; padding-left: 2.5em;">
+              <li>Sample \(\mathbf{x}^{1:L}\) i.i.d.
+                from \(\mathcal{D}\)</li>
+              <li>Sample \(t \sim \mathcal{U}[0, 1]\)</li>
+              <li>Compute \(\alpha_t, \dot{\alpha}_t\)</li>
+              <li>Sample \(\mathbf{z}_t^{1:L} \sim q(\mathbf{z}_t^{1:L} \mid \mathbf{x}^{1:L})\)</li>
+              <li>Compute \(\mathbf{x}_\theta(\mathbf{z}_t^{1:L})\)</li>
+              <li>\(\mathcal{L}^{\text{MDM}}(\theta) \leftarrow \frac{\dot{\alpha}_t}{1-\alpha_t}\sum_{\ell=1}^L
+                \delta_{\mathbf{z}_t^\ell, \texttt{[M]}} \log \langle \mathbf{x}_\theta^\ell(\mathbf{z}_t^{1:L}),
+                \mathbf{x}^\ell \rangle\)</li>
+              <li style="color: #8B4513;">\(\mathbf{y}_t^\ell \leftarrow \text{sg}(\texttt{one_hot}(\text{argmax}_i
+                \mathbf{x}_\theta^\ell(\mathbf{z}_t)_i)),\) for \(\ell \in [1, L]\)</li>
+              <li style="color: #8B4513;">Compute \(\mathbf{x}_\theta(\mathbf{y}_t^{1:L})\)</li>
+              <li style="color: #8B4513;">\(\mathcal{L}^{\text{SC}}(\theta) \leftarrow
+                \frac{\dot{\alpha}_t}{1-\alpha_t}\sum_{\ell=1}^L \log \langle
+                \mathbf{x}_\theta^\ell(\mathbf{y}_t^{1:L}), \mathbf{x}^\ell \rangle\)</li>
+              <li>Perform gradient descent step on \(\mathcal{L}^{\text{MDM}}(\theta)\) <span
+                  style="color: #8B4513;">\(+ \mathcal{L}^{\text{SC}}(\theta)\)</span></li>
+            </ol>
+            <b>until</b> converged<br>
+            <b>Return</b> \(\theta\)
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="Sampling">
+    <div class="container is-max-desktop">
+      <h2 class="title">ProSeCo Sampling: Interleaving Decoding and Correction</h2>
+      <div class="content is-medium">
+        <p>
+          Because our unified model can operate in both "unmasking" and "corrector" modes, we can fundamentally change
+          the generation process.
+          We can periodically pause the unmasking process to let the model review and revise its past decisions.
+
+        </p>
+        <p>
+          During inference, we interleave standard unmasking steps with corrective refinement loops.
+          To give users control over the compute budget, we introduce two hyperparameters: the <em>corrector
+            frequency</em> (\( \omega \)), which determines how often a correction loop is triggered, and the
+          <em>correction budget</em> (\( S \)), which dictates the number of iterative refinement steps within each
+          loop.
+        </p>
+        <p>
+          When a correction loop is triggered, the model takes its current predictions, converts them into a fully
+          unmasked sequence via <code>argmax</code> decoding, and iteratively passes this sequence back through the
+          network.
+          This inner loop serves a dual purpose:
+        </p>
+        <ol>
+          <li><strong>Retroactive Remediation:</strong> It allows the model to directly overwrite and fix errors in
+            token positions that were already unmasked in previous steps.</li>
+          <li><strong>Better Forward Predictions:</strong> It provides a refined, more accurate set of logits to be used
+            by the <code>sample_posterior</code> routine for unmasking the next batch of tokens.</li>
+        </ol>
+        <p>
+          The complete sampling procedure is outlined in Algorithm 2, with the inner corrector loop detailed in
+          Algorithm 3.
+          When ProSeCo acts strictly as an unmasking model (i.e., skipping the brown highlighted steps), it is identical
+          to standard MDM generation.
+          But with the corrector engaged, the model dynamically self-corrects as it generates.
+        </p>
+
+        <div
+          style="border-top: 2px solid #363636; border-bottom: 2px solid #363636; padding: 0.5em 0; margin: 2em 0; font-family: 'Noto Sans', sans-serif; background-color: #fafafa; overflow-x: auto;">
+          <div
+            style="border-bottom: 1px solid #363636; padding-bottom: 0.5em; margin-bottom: 0.5em; font-weight: bold;">
+            Algorithm 2: <span style="font-family: 'Google Sans', sans-serif;">ProSeCo</span> Sampling
+          </div>
+          <div style="font-size: 0.95em; line-height: 1.6; padding-left: 0.5em;">
+            <span style="color: #7a7a7a; font-family: monospace;">// Differences from standard MDM sampling highlighted
+              in <span style="color: #8B4513; font-weight: bold;">brown</span>.</span><br>
+            <b>Input:</b> Model \(\mathbf{x}_\theta\), length \(L\), unmasking steps \(T\), schedule \(\alpha_t\), <span
+              style="color: #8B4513;">self-correction budget (per step) \(S\), corrector frequency
+              \(\omega\).</span><br>
+            Initialize \(\mathbf{z}_{t(T)}^{1:L} \leftarrow \texttt{[M]}^{1:L}\)<br>
+            <b>for</b> \(i=T\) <b>to</b> \(1\) <b>do</b>
+            <div style="padding-left: 2em;">
+              \(\texttt{logits} \leftarrow \mathbf{x}_\theta(\mathbf{z}_t^{1:L})\)<br>
+              <span style="color: #8B4513;"><b>if</b> \((T-i+1) \pmod \omega == 0\) <b>then</b></span>
+              <div style="padding-left: 2em; color: #8B4513;">
+                \(\mathbf{z}_t^{1:L},~ \texttt{logits} \leftarrow \texttt{corrector}(\mathbf{x}_\theta, S,
+                \mathbf{z}_t^{1:L}, \texttt{logits})\)
+              </div>
+              <span style="color: #8B4513;"><b>end if</b></span><br>
+              \(\mathbf{z}_{t(i-1)}^{1:L} \leftarrow \texttt{sample_posterior}(\texttt{logits},~ \mathbf{z}_t^{1:L},
+              \alpha_{t(i)})\)<br>
+            </div>
+            <b>end for</b><br>
+            <b>Return</b> \(\texttt{sample}(\mathbf{x}_\theta(\mathbf{z}_{t(0)}^{1:L}))\)
+          </div>
+        </div>
+
+        <div
+          style="border-top: 2px solid #363636; border-bottom: 2px solid #363636; padding: 0.5em 0; margin: 2em 0; font-family: 'Noto Sans', sans-serif; background-color: #fafafa; overflow-x: auto;">
+          <div
+            style="border-bottom: 1px solid #363636; padding-bottom: 0.5em; margin-bottom: 0.5em; font-weight: bold;">
+            Algorithm 3: <span style="font-family: 'Google Sans', sans-serif;">ProSeCo</span> Inner
+            <code>corrector</code> loop
+          </div>
+          <div style="font-size: 0.95em; line-height: 1.6; padding-left: 0.5em;">
+            <b>Input:</b> Model \(\mathbf{x}_\theta\), self-correction budget (per step) \(S\), latent sequence
+            \(\mathbf{z}_t^{1:L}\), denoising output <code>logits</code><br>
+            Initialize \(\mathbf{y}_t^\ell \leftarrow \texttt{one_hot}(\text{argmax}_i \texttt{logits}_i), \forall \ell
+            \in [1, L]\)<br>
+            <b>for</b> \(S\) steps <b>do</b>
+            <div style="padding-left: 2em;">
+              \(\texttt{corrector_logits} \leftarrow \mathbf{x}_\theta(\mathbf{y}_t^{1:L})\)<br>
+              \(\mathbf{y}_t^{1:L} \leftarrow \texttt{sample}(\texttt{corrector_logits})\)<br>
+            </div>
+            <b>end for</b><br>
+            <span style="color: #7a7a7a; font-family: monospace;">// Correct unmasked positions in
+              \(\mathbf{z}_t^{1:L}\)</span><br>
+            \(\mathbf{z}_t^\ell \leftarrow \mathbf{y}_t^\ell, \forall \mathbf{z}_t^\ell \neq \texttt{[M]}\)<br>
+            <b>Return</b> \(\mathbf{z}_t^{1:L}\), <code>corrector_logits</code>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Experiments -->
+  <section class="section" id="Experiments">
+    <div class="container is-max-desktop">
+      <h2 class="title">Experiments</h2>
+      <div class="content is-medium">
+        <p>
+          We evaluate ProSeCo across multiple tasks, ranging from complex reasoning in code and
+          math to molecular design and unconditional text generation.
+          Across the board, we find that the ability to self-correct allows our models to generate better samples
+          faster.
+
+        </p>
+
+        <h3 class="subtitle" style="font-size:1.6rem; margin-top: 2rem;"><em>LLaDA SFT: Math & Code Benchmarks</em></h3>
+        <p>
+          <strong>Task & Dataset:</strong> We begin by applying supervised fine-tuning (SFT) to the 8B-parameter
+          LLaDA-Base model, aiming to improve its reasoning capabilities.
+          We train for ~40 billion tokens on a blend of the <strong>rStar-Coder</strong> (code) and
+          <strong>OpenMathInstruct-2</strong> (math) datasets.
+        </p>
+        <p>
+          <strong>Baselines:</strong> We compare our ProSeCo SFT against the vanilla SFT of LLaDA-Base, off-the-shelf
+          LLaDA variants (Base, Instruct, 1.5), an autoregressive equivalent (Llama 3.1 8B Instruct), and alternative
+          MDM corrector mechanisms like ReMDM and PRISM.
+
+        </p>
+        <p>
+          <strong>Takeaway:</strong> ProSeCo significantly outperforms all diffusion baselines and beats the comparable
+          Llama 3.1 AR model on three out of four benchmarks.
+          Furthermore, as shown in the figures below, ProSeCo delivers vastly superior quality-efficiency trade-offs.
+          It can generate samples 2–3x faster than baseline MDMs without losing accuracy (Fast regime), or leverage
+          increased inference-time compute to scale performance well beyond standard limitations (Max regime).
+        </p>
+
+        <div class="table-container" style="margin-top: 2em; margin-bottom: 2em;">
+          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size: 0.9em;">
+            <thead>
+              <tr>
+                <th rowspan="2" style="vertical-align: middle;">Model</th>
+                <th rowspan="2" style="vertical-align: middle; text-align: center;">Corrector<br>Sampling</th>
+                <th colspan="2" style="text-align: center;">Code</th>
+                <th colspan="2" style="text-align: center;">Math</th>
+              </tr>
+              <tr>
+                <th style="text-align: center;">HumanEval<br><span
+                    style="font-weight: normal; font-size: 0.85em;">(0-shot)</span></th>
+                <th style="text-align: center;">MBPP<br><span
+                    style="font-weight: normal; font-size: 0.85em;">(3-shot)</span></th>
+                <th style="text-align: center;">GSM8K<br><span
+                    style="font-weight: normal; font-size: 0.85em;">(5-shot)</span></th>
+                <th style="text-align: center;">Minerva<br><span
+                    style="font-weight: normal; font-size: 0.85em;">(4-shot)</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background-color: #f5f5f5;">
+                <td colspan="6"><em>Off-the-Shelf 8B Models</em></td>
+              </tr>
+              <tr>
+                <td>Llama3.1-Instruct</td>
+                <td style="text-align: center;">&#10007;</td>
+                <td style="text-align: center;">58.54</td>
+                <td style="text-align: center;">57.80</td>
+                <td style="text-align: center;">76.88</td>
+                <td style="text-align: center;">31.10</td>
+              </tr>
+              <tr>
+                <td>LLaDA 1.5</td>
+                <td style="text-align: center;">&#10007;</td>
+                <td style="text-align: center;">43.90</td>
+                <td style="text-align: center;">27.20</td>
+                <td style="text-align: center;">81.12</td>
+                <td style="text-align: center;">35.10</td>
+              </tr>
+              <tr>
+                <td>LLaDA-Instruct</td>
+                <td style="text-align: center;">&#10007;</td>
+                <td style="text-align: center;">40.24</td>
+                <td style="text-align: center;">29.40</td>
+                <td style="text-align: center;">78.85</td>
+                <td style="text-align: center;">33.32</td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;+ ReMDM</td>
+                <td style="text-align: center;">&#10003;</td>
+                <td style="text-align: center;">40.24</td>
+                <td style="text-align: center;">35.20</td>
+                <td style="text-align: center;">79.08</td>
+                <td style="text-align: center;">32.72</td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;+ PRISM</td>
+                <td style="text-align: center;">&#10003;</td>
+                <td style="text-align: center;">42.70</td>
+                <td style="text-align: center;">32.30</td>
+                <td style="text-align: center;">--</td>
+                <td style="text-align: center;">--</td>
+              </tr>
+              <tr>
+                <td>LLaDA-Base</td>
+                <td style="text-align: center;">&#10007;</td>
+                <td style="text-align: center;">33.54</td>
+                <td style="text-align: center;">40.40</td>
+                <td style="text-align: center;">66.72</td>
+                <td style="text-align: center;">27.88</td>
+              </tr>
+              <tr style="background-color: #f5f5f5;">
+                <td colspan="6"><em>Our SFT with LLaDA-Base 8B Model</em></td>
+              </tr>
+              <tr>
+                <td>Vanilla SFT</td>
+                <td style="text-align: center;">&#10007;</td>
+                <td style="text-align: center;">48.17</td>
+                <td style="text-align: center;">43.20</td>
+                <td style="text-align: center;">77.48</td>
+                <td style="text-align: center;">29.74</td>
+              </tr>
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;+ ReMDM</td>
+                <td style="text-align: center;">&#10003;</td>
+                <td style="text-align: center;">43.90</td>
+                <td style="text-align: center;">42.40</td>
+                <td style="text-align: center;"><u>80.97</u></td>
+                <td style="text-align: center;">29.90</td>
+              </tr>
+              <tr style="font-weight: bold; background-color: #eef6fc;">
+                <td>ProSeCo SFT (Ours)</td>
+                <td style="text-align: center;">&#10007;</td>
+                <td style="text-align: center;"><u>52.44</u></td>
+                <td style="text-align: center;"><u>44.00</u></td>
+                <td style="text-align: center;">79.45</td>
+                <td style="text-align: center;"><u>32.42</u></td>
+              </tr>
+              <tr style="font-weight: bold; background-color: #eef6fc;">
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;+ ProSeCo Sampling</td>
+                <td style="text-align: center;">&#10003;</td>
+                <td style="text-align: center;">62.20</td>
+                <td style="text-align: center;">50.20</td>
+                <td style="text-align: center;">82.18</td>
+                <td style="text-align: center;">35.10</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size: 0.85em; text-align: center; color: #555;"><strong>Table 1:</strong> Pass@1 accuracy on
+            Code and Math benchmarks.
+            Best values per column in bold, second best underlined.</p>
+        </div>
+
+        <h4 class="subtitle has-text-centered" style="font-size:1.1rem;font-weight: normal;">
+          <div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+            <img src="static/images/benchmarks_ours_vs_baseline_all.png" alt="Tradeoffs"
+              style="width: 800px; max-width: 100%; height: auto;">
+          </div>
+          <br>
+          <em>
+            Analyzing the quality-efficiency trade-off for ProSeCo.
+            Standard MDMs (Baseline; <a style="color: #808080;">gray dot</a>) attain best performance when decoding a
+            single token in every step.
+            ProSeCo models can vary number of corrector steps and attain comparable performance more efficiently with
+            fewer unmasking steps (<a style="color: #33CD32;">Ours: Fast; green star</a>), achieve even better quality
+            for modest increase in compute budget (<a style="color: #FFA503;">Ours: Balanced; orange star</a>), or
+            maximize quality by scaling inference-time compute even further (<a style="color: #4169E1;">Ours: Max; blue
+              star</a>)
+          </em>
+        </h4>
+
+        <h4 class="subtitle has-text-centered" style="font-size:1.1rem;font-weight: normal;">
+          <div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+            <img src="static/images/all_benchmarks_line_plots_block32.png" alt="Pareto Frontier"
+              style="width: 800px; max-width: 100%; height: auto;">
+          </div>
+          <br>
+          <em>
+            Pareto frontier of parallel decoding and quality.
+            When decoding in parallel (i.e., fewer unmasking steps on \(x\)-axis), quality deteriorates.
+            Applying a modest number of corrector steps, allows ProSeCo models to recover from these errors and extend
+            this frontier.
+          </em>
+        </h4>
+
+
+        <h3 class="subtitle" style="font-size:1.6rem; margin-top: 3rem;"><em>Guidance Results: Molecule Property
+            Maximization</em></h3>
+        <p>
+          <strong>Task & Dataset:</strong> We test guided generation using the <strong>QM9</strong> dataset, consisting
+          of SMILES string representations of molecules.
+          The goal is to maximize specific chemical properties, namely, <em>ring count</em> and <em>drug-likeness
+            (QED)</em>, without causing the generated samples to collapse into invalid or highly repetitive sequences.
+        </p>
+        <p>
+          <strong>Baselines:</strong> Autoregressive (AR), standard masked diffusion (MDLM), uniform categorical noise
+          diffusion (UDLM), and ReMDM.
+        </p>
+        <p>
+          <strong>Takeaway:</strong> A classic problem with classifier-free guidance (CFG) is that pushing guidance
+          strengths too high degrades sample diversity and quality.
+          ProSeCo naturally recovers from these guidance-induced errors, noticeably pushing the Pareto frontier up and
+          to the right.
+          It generates higher quantities of novel, valid molecules while simultaneously hitting higher property scores.
+        </p>
+
+        <h4 class="subtitle has-text-centered" style="font-size:1.1rem;font-weight: normal;">
+          <div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+            <img src="static/images/legend_only.png" alt="QM9 Legend"
+              style="width: 500px; max-width: 28%; height: auto;">
+            <img src="static/images/ring_count_cfg.png" ait="QM9 Ring Count"
+              style="width: 500px; max-width: 35%; height: auto;">
+            <img src="static/images/qed_cfg.png" alt="QM9 QED" style="width: 500px; max-width: 35%; height: auto;">
+          </div>
+          <br>
+          <em>
+            ProSeCo better navigates the novelty-property maximization Pareto frontier.
+            Values correspond to number of novel samples (valid and unique molecules not present in the QM9 dataset;
+            \(x\)-axis) and mean property value of novel samples (\(y\)-axis) for controlled generation using discrete
+            classifier-free guidance, with varying unmasking steps \(T\) (line style) and guidance strength \(\gamma\)
+            (marker size).
+            (Left) Maximizing the ring count property.
+            (Right) Maximizing the drug likeness (QED) property.
+          </em>
+        </h4>
+
+
+        <h3 class="subtitle" style="font-size:1.6rem; margin-top: 3rem;"><em>Unconditional Text Generation</em></h3>
+        <p>
+          <strong>Task & Dataset:</strong> Finally, we evaluate open-ended, unconditional text generation by training
+          models from scratch on the <strong>OpenWebText</strong> dataset to generate 1,024-token sequences.
+        </p>
+        <p>
+          <strong>Baselines:</strong> AR, standard MDLM, ReMDM, and PRISM.
+        </p>
+        <p>
+          <strong>Takeaway:</strong> ProSeCo generates fluent text with high sample quality (measured by MAUVE and
+          Generative Perplexity) without collapsing the diversity of the generated outputs (measured by Entropy).
+          Crucially, it does this much more efficiently than alternatives: a ProSeCo model using just 256 inference
+          steps achieves comparable quality to PRISM at 512 steps and ReMDM at 1024 steps.
+        </p>
+
+        <div class="table-container" style="margin-top: 2em;">
+          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size: 0.9em;">
+            <thead>
+              <tr>
+                <th rowspan="2" style="vertical-align: middle;">Model</th>
+                <th colspan="4" style="text-align: center;">MAUVE (&uarr;)</th>
+                <th colspan="4" style="text-align: center;">Gen.
+                  PPL (&darr;)</th>
+                <th colspan="4" style="text-align: center;">Entropy (&uarr;)</th>
+              </tr>
+              <tr>
+                <th style="text-align: center;">128</th>
+                <th style="text-align: center;">256</th>
+                <th style="text-align: center;">512</th>
+                <th style="text-align: center;">1024</th>
+                <th style="text-align: center;">128</th>
+                <th style="text-align: center;">256</th>
+                <th style="text-align: center;">512</th>
+                <th style="text-align: center;">1024</th>
+                <th style="text-align: center;">128</th>
+                <th style="text-align: center;">256</th>
+                <th style="text-align: center;">512</th>
+                <th style="text-align: center;">1024</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Data</strong></td>
+                <td colspan="4" style="text-align: center;">1.00</td>
+                <td colspan="4" style="text-align: center;">14.8</td>
+                <td colspan="4" style="text-align: center;">5.44</td>
+              </tr>
+              <tr>
+                <td><strong>AR</strong> (T=1024)</td>
+                <td colspan="4" style="text-align: center;">0.760</td>
+                <td colspan="4" style="text-align: center;">12.1</td>
+                <td colspan="4" style="text-align: center;">5.22</td>
+              </tr>
+              <tr style="background-color: #f5f5f5;">
+                <td>MDLM</td>
+                <td style="text-align: center;">0.015</td>
+                <td style="text-align: center;">0.023</td>
+                <td style="text-align: center;">0.031</td>
+                <td style="text-align: center;">0.042</td>
+                <td style="text-align: center;">61.5</td>
+                <td style="text-align: center;">55.8</td>
+                <td style="text-align: center;">53.0</td>
+                <td style="text-align: center;">51.3</td>
+                <td style="text-align: center;">5.52</td>
+                <td style="text-align: center;">5.49</td>
+                <td style="text-align: center;">5.48</td>
+                <td style="text-align: center;">5.46</td>
+              </tr>
+              <tr>
+                <td>ReMDM</td>
+                <td style="text-align: center;">0.057</td>
+                <td style="text-align: center;">0.216</td>
+                <td style="text-align: center;">0.350</td>
+                <td style="text-align: center;">0.403</td>
+                <td style="text-align: center;">42.5</td>
+                <td style="text-align: center;">30.5</td>
+                <td style="text-align: center;">21.1</td>
+                <td style="text-align: center;">28.6</td>
+                <td style="text-align: center;">5.43</td>
+                <td style="text-align: center;">5.34</td>
+                <td style="text-align: center;">5.21</td>
+                <td style="text-align: center;">5.38</td>
+              </tr>
+              <tr style="background-color: #f5f5f5;">
+                <td>PRISM</td>
+                <td style="text-align: center;">0.118</td>
+                <td style="text-align: center;">0.294</td>
+                <td style="text-align: center;">0.423</td>
+                <td style="text-align: center;">0.527</td>
+                <td style="text-align: center;">21.5</td>
+                <td style="text-align: center;">18.0</td>
+                <td style="text-align: center;">16.4</td>
+                <td style="text-align: center;">15.3</td>
+                <td style="text-align: center;">5.18</td>
+                <td style="text-align: center;">5.15</td>
+                <td style="text-align: center;">5.12</td>
+                <td style="text-align: center;">5.10</td>
+              </tr>
+              <tr style="font-weight: bold; background-color: #eef6fc;">
+                <td>ProSeCo (Ours)</td>
+                <td style="text-align: center;">0.295</td>
+                <td style="text-align: center;">0.557</td>
+                <td style="text-align: center;">0.597</td>
+                <td style="text-align: center;">0.604</td>
+                <td style="text-align: center;">23.1</td>
+                <td style="text-align: center;">16.5</td>
+                <td style="text-align: center;">13.2</td>
+                <td style="text-align: center;">10.9</td>
+                <td style="text-align: center;">5.45</td>
+                <td style="text-align: center;">5.39</td>
+                <td style="text-align: center;">5.29</td>
+                <td style="text-align: center;">5.22</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size: 0.85em; text-align: center; color: #555;"><strong>Table 2:</strong> Unconditional
+            generation sample quality for models trained on OpenWebText across various inference budgets.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Conclusion -->
+  <section class="section" id="Conclusion">
+    <div class="container is-max-desktop">
+      <h2 class="title">Conclusion</h2>
+      <div class="content is-medium">
+        In this work, we presented a framework for jointly training a diffusion model to generate sequences via
+        unmasking and self-correction.
+        We enable and take advantage of this new ability via minimal and straightforward modifications to standard MDM
+        training and sampling algorithms.
+        Evaluating on conditional and unconditional generation, across various model sizes, we demonstrated that our
+        method consistently outperforms vanilla MDMs and alternative corrector methods both in terms of speed-quality
+        tradeoffs and in the ability to further scale inference-time compute for improved generation.
+      </div>
+    </div>
+    <!-- End Conclusion-->
+
+    <!--BibTex citation -->
+    <section class="section" id="BibTeX">
+      <div class="container is-max-desktop content">
+        <h2 class="title">BibTeX</h2>
+        <pre><code>
+          @article{
+            schiff2026learn,
+            title={Learn from Your Mistakes: Self-Correcting Masked Diffusion Models},
+            author={Schiff, Yair and Belhasin, Omer and Uziel, Roy and Wang, Guanghan and Arriola, Marianne and Turok, Gilad and Elad, Michael and Kuleshov, Volodymyr},
+            journal={arXiv preprint arXiv:2602.11590},
+            year={2026}
+          }
+        </code></pre>
+      </div>
+    </section>
+    <!--End BibTex citation -->
+
+
+    <footer class="footer">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-8">
+            <div class="content is-medium">
+
+              <p>
+                This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template"
+                  target="_blank">Academic Project Page Template</a> which was adopted from the <a
+                  href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+                <br> This website is licensed under a <a rel="license"
+                  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+                  Commons Attribution-ShareAlike 4.0 International License</a>.
+              </p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Statcounter tracking code -->
+
+    <!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+</body>
+
+</html>
