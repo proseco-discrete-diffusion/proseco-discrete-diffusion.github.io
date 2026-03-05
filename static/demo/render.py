@@ -78,13 +78,18 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
     <head>
         <style>
             body {{
-                margin: 0; padding: 40px; background-color: #fafbfc;
-                display: flex; justify-content: center; align-items: center;
+                margin: 0; 
+                padding: 20px; /* Tight borders on sides, moderate at top */
+                background-color: #ffffff;
+                display: flex; justify-content: center; 
+                align-items: flex-start; /* LOCKS boxes to the top of the video */
                 height: 100vh; box-sizing: border-box;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             }}
             .anim-container {{
-                width: 100%; max-width: 1100px; line-height: 1.6;
+                width: 100%; 
+                max-width: 1240px; /* WIDE boxes to reduce horizontal gray space */
+                line-height: 1.6;
             }}
             
             /* Shared Box Styles */
@@ -111,7 +116,7 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
             /* Response Specifics */
             .response-box {{
                 border-left: 6px solid #10b981; 
-                min-height: 120px; /* TIGHTENED HEIGHT */
+                min-height: 120px; /* TIGHT height hugs the text */
                 display: flex; flex-direction: column;
             }}
             .response-header {{
