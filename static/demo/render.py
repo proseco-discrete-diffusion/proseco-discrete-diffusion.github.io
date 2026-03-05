@@ -16,56 +16,84 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
     is_corrector_list = data['is_corrector'] 
     
     TOKEN_REGEX = r'(<\|mdm_mask\|>|<\|endoftext\|>|\n| )'
+    
+    def is_only_masks_or_space(token_list):
+        return all(t in ['<|mdm_mask|>', '<|endoftext|>', ' ', '\n', ''] for t in token_list)
 
     frames_html = []
     modes = []
     prev_tokens = []
 
+    # Pre-compute the final tokens to use as our "structural backbone"
+    final_tokens = [t for t in re.split(TOKEN_REGEX, output_strs[-1]) if t]
+
     # 2. Tokenize and Diff Logic
     for i, text in enumerate(output_strs):
         current_tokens = [t for t in re.split(TOKEN_REGEX, text) if t]
         frame_spans = []
-        
-        # Read the explicit mode straight from your JSON
         is_corrector = is_corrector_list[i]
         
-        # Only apply a highlight class if it is a corrector step
-        highlight_class = "token-corrector" if is_corrector else ""
-        
-        if i == 0:
-            for tok in current_tokens:
-                if tok == '<|mdm_mask|>': frame_spans.append(' ') # Replace mask with whitespace
-                elif tok == '<|endoftext|>': continue
-                elif tok == '\n': frame_spans.append('<br>')
-                elif tok.strip() == '': frame_spans.append('<span> </span>')
-                else: frame_spans.append(f'<span>{html.escape(tok)}</span>')
-            prev_tokens = current_tokens
-            frames_html.append("".join(frame_spans))
-            modes.append("Corrector" if is_corrector else "Denoiser")
-            continue
+        # A. Determine which tokens should be highlighted in GREEN
+        # Rule: Only highlight if is_corrector=True AND we are overwriting actual text (or inserting between text)
+        green_highlight_indices = set()
+        if i > 0 and is_corrector:
+            matcher_prev = difflib.SequenceMatcher(None, prev_tokens, current_tokens)
+            for tag, i1, i2, j1, j2 in matcher_prev.get_opcodes():
+                if tag == 'replace':
+                    old_toks = prev_tokens[i1:i2]
+                    # If the replaced text had actual words in it, highlight the new words green
+                    if not is_only_masks_or_space(old_toks):
+                        for j in range(j1, j2):
+                            green_highlight_indices.add(j)
+                elif tag == 'insert':
+                    # If it's inserting entirely new words into the structure, highlight green
+                    for j in range(j1, j2):
+                        green_highlight_indices.add(j)
 
-        matcher = difflib.SequenceMatcher(None, prev_tokens, current_tokens)
+        # B. Map the current step to the FINAL step to find mistakes and maintain structural spacing
+        matcher_final = difflib.SequenceMatcher(None, current_tokens, final_tokens)
         
-        for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+        for tag, i1, i2, j1, j2 in matcher_final.get_opcodes():
             if tag == 'equal':
-                for tok in current_tokens[j1:j2]:
-                    if tok == '<|mdm_mask|>': frame_spans.append(' ')
-                    elif tok == '<|endoftext|>': continue
+                # These tokens match the final string perfectly (They are correct)
+                for idx in range(i1, i2):
+                    tok = current_tokens[idx]
+                    if tok == '<|endoftext|>': continue
                     elif tok == '\n': frame_spans.append('<br>')
                     elif tok.strip() == '': frame_spans.append('<span> </span>')
-                    else: frame_spans.append(f'<span>{html.escape(tok)}</span>')
-            elif tag in ('replace', 'insert'):
-                for tok in current_tokens[j1:j2]:
-                    if tok == '<|mdm_mask|>': frame_spans.append(' ')
-                    elif tok == '<|endoftext|>': continue
-                    elif tok == '\n': frame_spans.append('<br>')
-                    elif tok.strip() == '': frame_spans.append('<span> </span>')
-                    else: 
-                        # Apply green highlight if correcting, otherwise just normal text
-                        if highlight_class:
-                            frame_spans.append(f'<span class="{highlight_class}">{html.escape(tok)}</span>')
+                    else:
+                        if idx in green_highlight_indices:
+                            frame_spans.append(f'<span class="token-corrector">{html.escape(tok)}</span>')
                         else:
                             frame_spans.append(f'<span>{html.escape(tok)}</span>')
+            else:
+                curr_sub = current_tokens[i1:i2]
+                final_sub = final_tokens[j1:j2]
+                
+                if all(t in ['<|mdm_mask|>', ' ', '\n'] for t in curr_sub):
+                    # It's just placeholders; reserve space for the final words invisibly
+                    for tok in final_sub:
+                        if tok == '<|endoftext|>': continue
+                        elif tok == '\n': frame_spans.append('<br>')
+                        elif tok.strip() == '': frame_spans.append('<span> </span>')
+                        else:
+                            frame_spans.append(f'<span style="opacity: 0;">{html.escape(tok)}</span>')
+                else:
+                    # These tokens DO NOT belong in the final string! They are mistakes.
+                    for idx in range(i1, i2):
+                        tok = current_tokens[idx]
+                        if tok == '<|mdm_mask|>':
+                            frame_spans.append('<span style="opacity: 0;">     </span>')
+                        elif tok == '<|endoftext|>': continue
+                        elif tok == '\n': frame_spans.append('<br>')
+                        elif tok.strip() == '': frame_spans.append('<span> </span>')
+                        else:
+                            # Flag it as a mistake (red font). If it was also an active text override, 
+                            # it gets the green background too, indicating a "wrong correction".
+                            if idx in green_highlight_indices:
+                                frame_spans.append(f'<span class="token-corrector token-mistake">{html.escape(tok)}</span>')
+                            else:
+                                frame_spans.append(f'<span class="token-mistake">{html.escape(tok)}</span>')
                     
         prev_tokens = current_tokens
         frames_html.append("".join(frame_spans))
@@ -79,20 +107,18 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
         <style>
             body {{
                 margin: 0; 
-                padding: 20px; /* Tight borders on sides, moderate at top */
-                background-color: #ffffff;
+                padding: 20px; 
+                background-color: #ffffff; 
                 display: flex; justify-content: center; 
-                align-items: flex-start; /* LOCKS boxes to the top of the video */
+                align-items: flex-start; 
                 height: 100vh; box-sizing: border-box;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             }}
             .anim-container {{
                 width: 100%; 
-                max-width: 1240px; /* WIDE boxes to reduce horizontal gray space */
+                max-width: 1240px; 
                 line-height: 1.6;
             }}
-            
-            /* Shared Box Styles */
             .content-box {{
                 background-color: #ffffff;
                 padding: 24px 28px;
@@ -103,8 +129,6 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
                 font-size: 0.9em; text-transform: uppercase; letter-spacing: 1.5px;
                 color: #6a737d; font-weight: 700;
             }}
-
-            /* Prompt Specifics */
             .prompt-box {{
                 border-left: 6px solid #4a90e2; 
                 margin-bottom: 24px;
@@ -112,11 +136,9 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
             .prompt-text {{
                 font-size: 1.35em; color: #24292e; margin: 12px 0 0 0; font-weight: 500;
             }}
-
-            /* Response Specifics */
             .response-box {{
                 border-left: 6px solid #10b981; 
-                min-height: 120px; /* TIGHT height hugs the text */
+                height: 340px; 
                 display: flex; flex-direction: column;
             }}
             .response-header {{
@@ -128,8 +150,6 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
                 white-space: pre-wrap; word-wrap: break-word;
                 font-size: 18px; color: #24292e; line-height: 1.7; flex-grow: 1;
             }}
-
-            /* iOS Style Toggle Switch */
             .mode-toggle {{
                 position: relative; display: flex; background-color: #e1e4e8;
                 border-radius: 40px; width: 240px; height: 42px;
@@ -155,6 +175,7 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
             
             /* Token Styles */
             .token-corrector {{ background-color: #90ee90; border-radius: 5px; padding: 2px 4px; font-weight: 600; color: #005cc5; }}
+            .token-mistake {{ color: #d73a49 !important; font-weight: 600; }}
         </style>
     </head>
     <body>
@@ -217,7 +238,10 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
         for step in range(total_steps):
             page.evaluate(f"window.renderFrame({step})")
 
-            for _ in range(24):
+            is_corr = is_corrector_list[step]
+            frames_to_capture = 35 if is_corr else 15
+
+            for _ in range(frames_to_capture):
                 screenshot_bytes = page.screenshot(type='jpeg', quality=100)
                 nparr = np.frombuffer(screenshot_bytes, np.uint8)
                 cv_img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
