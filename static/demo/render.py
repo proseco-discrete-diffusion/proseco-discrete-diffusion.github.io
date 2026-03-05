@@ -28,11 +28,13 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
         
         # Read the explicit mode straight from your JSON
         is_corrector = is_corrector_list[i]
-        highlight_class = "token-corrector" if is_corrector else "token-denoiser"
+        
+        # Only apply a highlight class if it is a corrector step
+        highlight_class = "token-corrector" if is_corrector else ""
         
         if i == 0:
             for tok in current_tokens:
-                if tok == '<|mdm_mask|>': frame_spans.append('<span class="token-mask">[MASK]</span>')
+                if tok == '<|mdm_mask|>': frame_spans.append(' ') # Replace mask with whitespace
                 elif tok == '<|endoftext|>': continue
                 elif tok == '\n': frame_spans.append('<br>')
                 elif tok.strip() == '': frame_spans.append('<span> </span>')
@@ -42,24 +44,28 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
             modes.append("Corrector" if is_corrector else "Denoiser")
             continue
 
-        # We use difflib strictly to locate WHICH exact words changed to wrap them in color
         matcher = difflib.SequenceMatcher(None, prev_tokens, current_tokens)
         
         for tag, i1, i2, j1, j2 in matcher.get_opcodes():
             if tag == 'equal':
                 for tok in current_tokens[j1:j2]:
-                    if tok == '<|mdm_mask|>': frame_spans.append('<span class="token-mask">[MASK]</span>')
+                    if tok == '<|mdm_mask|>': frame_spans.append(' ')
                     elif tok == '<|endoftext|>': continue
                     elif tok == '\n': frame_spans.append('<br>')
                     elif tok.strip() == '': frame_spans.append('<span> </span>')
                     else: frame_spans.append(f'<span>{html.escape(tok)}</span>')
             elif tag in ('replace', 'insert'):
                 for tok in current_tokens[j1:j2]:
-                    if tok == '<|mdm_mask|>': frame_spans.append('<span class="token-mask">[MASK]</span>')
+                    if tok == '<|mdm_mask|>': frame_spans.append(' ')
                     elif tok == '<|endoftext|>': continue
                     elif tok == '\n': frame_spans.append('<br>')
                     elif tok.strip() == '': frame_spans.append('<span> </span>')
-                    else: frame_spans.append(f'<span class="{highlight_class}">{html.escape(tok)}</span>')
+                    else: 
+                        # Apply green highlight if correcting, otherwise just normal text
+                        if highlight_class:
+                            frame_spans.append(f'<span class="{highlight_class}">{html.escape(tok)}</span>')
+                        else:
+                            frame_spans.append(f'<span>{html.escape(tok)}</span>')
                     
         prev_tokens = current_tokens
         frames_html.append("".join(frame_spans))
@@ -105,7 +111,7 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
             /* Response Specifics */
             .response-box {{
                 border-left: 6px solid #10b981; 
-                min-height: 380px;
+                min-height: 120px; /* TIGHTENED HEIGHT */
                 display: flex; flex-direction: column;
             }}
             .response-header {{
@@ -143,8 +149,6 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
             .mode-toggle:not(.corrector) .label-corrector {{ color: #6a737d; font-weight: 500; }}
             
             /* Token Styles */
-            .token-mask {{ color: #babbbd; font-weight: normal; }}
-            .token-denoiser {{ background-color: #add8e6; border-radius: 5px; padding: 2px 4px; font-weight: 600; }}
             .token-corrector {{ background-color: #90ee90; border-radius: 5px; padding: 2px 4px; font-weight: 600; color: #005cc5; }}
         </style>
     </head>
@@ -193,11 +197,9 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
     
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        # 1280x720 ensures crisp HD output in the final mp4
         page = browser.new_page(viewport={"width": 1280, "height": 720}) 
         page.set_content(html_template)
 
-        # H.264 (avc1) codec for high compatibility
         fourcc = cv2.VideoWriter_fourcc(*'avc1')
         fps = 30
         video = cv2.VideoWriter(output_mp4, fourcc, fps, (1280, 720))
@@ -210,8 +212,6 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
         for step in range(total_steps):
             page.evaluate(f"window.renderFrame({step})")
 
-            # Capture 24 frames (~0.8 seconds at 30fps) for this step
-            # Note: This loop is why you can see the CSS slider smoothly animate in the final video!
             for _ in range(24):
                 screenshot_bytes = page.screenshot(type='jpeg', quality=100)
                 nparr = np.frombuffer(screenshot_bytes, np.uint8)
