@@ -23,6 +23,7 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
     frames_html = []
     modes = []
     prev_tokens = []
+    prev_states = [] # Tracks ['normal', 'corrected_now', 'corrected_past']
 
     # Pre-compute the final tokens to use as our "structural backbone"
     final_tokens = [t for t in re.split(TOKEN_REGEX, output_strs[-1]) if t]
@@ -30,25 +31,30 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
     # 2. Tokenize and Diff Logic
     for i, text in enumerate(output_strs):
         current_tokens = [t for t in re.split(TOKEN_REGEX, text) if t]
+        curr_states = ['normal'] * len(current_tokens)
         frame_spans = []
         is_corrector = is_corrector_list[i]
         
-        # A. Determine which tokens should be highlighted in GREEN
-        # Rule: Only highlight if is_corrector=True AND we are overwriting actual text (or inserting between text)
-        green_highlight_indices = set()
-        if i > 0 and is_corrector:
+        # A. Determine which tokens should be highlighted (and track past corrections)
+        if i > 0:
             matcher_prev = difflib.SequenceMatcher(None, prev_tokens, current_tokens)
             for tag, i1, i2, j1, j2 in matcher_prev.get_opcodes():
-                if tag == 'replace':
-                    old_toks = prev_tokens[i1:i2]
-                    # If the replaced text had actual words in it, highlight the new words green
-                    if not is_only_masks_or_space(old_toks):
-                        for j in range(j1, j2):
-                            green_highlight_indices.add(j)
-                elif tag == 'insert':
-                    # If it's inserting entirely new words into the structure, highlight green
-                    for j in range(j1, j2):
-                        green_highlight_indices.add(j)
+                if tag == 'equal':
+                    for k in range(j2 - j1):
+                        state = prev_states[i1 + k]
+                        # Downgrade active highlights to persistent past highlights
+                        if state == 'corrected_now':
+                            state = 'corrected_past'
+                        curr_states[j1 + k] = state
+                elif tag in ('replace', 'insert'):
+                    if is_corrector:
+                        old_toks = prev_tokens[i1:i2] if tag == 'replace' else []
+                        # Only highlight if replacing actual text or inserting
+                        if not is_only_masks_or_space(old_toks) or tag == 'insert':
+                            for j in range(j1, j2):
+                                # Never highlight whitespace or structural tags
+                                if current_tokens[j].strip() not in ('', '<|mdm_mask|>', '<|endoftext|>'):
+                                    curr_states[j] = 'corrected_now'
 
         # B. Map the current step to the FINAL step to find mistakes and maintain structural spacing
         matcher_final = difflib.SequenceMatcher(None, current_tokens, final_tokens)
@@ -62,15 +68,17 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
                     elif tok == '\n': frame_spans.append('<br>')
                     elif tok.strip() == '': frame_spans.append('<span> </span>')
                     else:
-                        if idx in green_highlight_indices:
+                        if curr_states[idx] == 'corrected_now':
                             frame_spans.append(f'<span class="token-corrector">{html.escape(tok)}</span>')
+                        elif curr_states[idx] == 'corrected_past':
+                            frame_spans.append(f'<span class="token-fixed">{html.escape(tok)}</span>')
                         else:
                             frame_spans.append(f'<span>{html.escape(tok)}</span>')
             else:
                 curr_sub = current_tokens[i1:i2]
                 final_sub = final_tokens[j1:j2]
                 
-                if all(t in ['<|mdm_mask|>', ' ', '\n'] for t in curr_sub):
+                if all(t in ['<|mdm_mask|>', ' ', '\n', '<|endoftext|>'] for t in curr_sub):
                     # It's just placeholders; reserve space for the final words invisibly
                     for tok in final_sub:
                         if tok == '<|endoftext|>': continue
@@ -88,14 +96,16 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
                         elif tok == '\n': frame_spans.append('<br>')
                         elif tok.strip() == '': frame_spans.append('<span> </span>')
                         else:
-                            # Flag it as a mistake (red font). If it was also an active text override, 
-                            # it gets the green background too, indicating a "wrong correction".
-                            if idx in green_highlight_indices:
+                            # Mistake overrides standard color to RED, but preserves background if actively corrected
+                            if curr_states[idx] == 'corrected_now':
                                 frame_spans.append(f'<span class="token-corrector token-mistake">{html.escape(tok)}</span>')
+                            elif curr_states[idx] == 'corrected_past':
+                                frame_spans.append(f'<span class="token-fixed token-mistake">{html.escape(tok)}</span>')
                             else:
                                 frame_spans.append(f'<span class="token-mistake">{html.escape(tok)}</span>')
                     
         prev_tokens = current_tokens
+        prev_states = curr_states
         frames_html.append("".join(frame_spans))
         modes.append("Corrector" if is_corrector else "Denoiser")
 
@@ -175,7 +185,8 @@ def export_pixel_perfect_video(json_path, output_mp4="beautiful_animation.mp4"):
             
             /* Token Styles */
             .token-corrector {{ background-color: #90ee90; border-radius: 5px; padding: 2px 4px; font-weight: 600; color: #005cc5; }}
-            .token-mistake {{ color: #d73a49 !important; font-weight: 600; }}
+            .token-fixed {{ color: #10b981; font-weight: 600; }} /* Emerald green font for previously fixed tokens */
+            .token-mistake {{ color: #d73a49 !important; font-weight: 600; }} /* Red overrides other text colors */
         </style>
     </head>
     <body>
